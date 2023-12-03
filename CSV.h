@@ -67,8 +67,8 @@ std::string parseCSVField(std::stringstream& ss) {
 }
 
 // line format: name,category,number_of_reviews,rating,price
-std::unordered_map<std::string, Listing> readCSVGenerated(const std::string& filename) {
-    std::unordered_map<std::string, Listing> listings;
+std::map<std::string, Listing> readCSVGenerated(const std::string& filename) {
+    std::map<std::string, Listing> listings;
     std::ifstream file(filename);
     std::string line, name, category;
     int numRatings = 0;
