@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include "Listing.h"
 
-// This file contains the function to extract data from a CSV file and its helpers
+// This file contains the function to extract data from a CSV file and its helpers 
 // readCSVOriginal and readCSVBackup are obsolete, the datasets scraped from the internet were incomplete
 // and hard to work with, so I generated my own CSV file using an online tool: "https://extendsclass.com/csv-generator.html"
 
