@@ -91,8 +91,8 @@ int main() {
 
             // Display the listings (always will be 100 items)
             displayListings(mergesorted_listings);
-            std::cout << "items sorted: 100";
-            std::cout << "sorting time: " << t;
+            std::cout << "items sorted: 100\n";
+            std::cout << "sorting time: " << t << "\n";
         }
 
         // Run Quicksort test 100 (choose attribute to sort by)
@@ -109,7 +109,8 @@ int main() {
 
             // Display the listings
             displayListings(quicksorted_listings);
-            std::cout << "sorting time: " << t;
+            std::cout << "items sorted: 100\n";
+            std::cout << "sorting time: " << t << "\n";
         }
     }
 
