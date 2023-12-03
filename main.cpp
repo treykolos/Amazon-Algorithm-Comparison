@@ -28,32 +28,12 @@ int main() {
 
         if (function == 1) {
             std::string filename = "Files/test.csv";
-            auto listings = readCSVGenerated(filename);
-            int index = 1;
-
-            for (const auto& pair : listings) {
-                std::cout << index << ". " << "Name: " << pair.first
-                    << ", Category: " << pair.second.getCategory()
-                    << ", Num Ratings: " << pair.second.getNumRatings()
-                    << ", Rating: " << pair.second.getRating()
-                    << ", Price: $" << pair.second.getPrice() << std::endl;
-                index++;
-            }
+            readDisplayListings(filename);
         }
 
         if (function == 2) {
             std::string filename = "Files/test100.csv";
-            auto listings = readCSVGenerated(filename);
-            int index = 1;
-
-            for (const auto& pair : listings) {
-                std::cout << index << ". " << "Name: " << pair.first
-                    << ", Category: " << pair.second.getCategory()
-                    << ", Num Ratings: " << pair.second.getNumRatings()
-                    << ", Rating: " << pair.second.getRating()
-                    << ", Price: $" << pair.second.getPrice() << std::endl;
-                index++;
-            }
+            readDisplayListings(filename);
         }
 
         if (function == 3) {
@@ -90,6 +70,7 @@ int main() {
     
     // Test sorting algorithms
     if (option == 2) {
+        std::string filename = "Files/test100.csv";
         int function = 0;
         std::cout << "What function would you like to run?\n" << "Test Mergesort = 1\n" 
             << "Test Quicksort = 2\n";
@@ -97,42 +78,25 @@ int main() {
 
         // Run Mergesort test 100 (choose attribute to sort by)
         if (function == 1) { 
-            std::string filename = "Files/test100.csv";
             auto listings = readCSVGenerated(filename);
 
-            // Run Mergesort
+            // Mergesort the listings
+            auto mergesorted_listings = readCSVGenerated(filename);
 
-            int index = 1;
-
-            for (const auto& pair : listings) {
-                std::cout << index << ". " << "Name: " << pair.first
-                    << ", Category: " << pair.second.getCategory()
-                    << ", Num Ratings: " << pair.second.getNumRatings()
-                    << ", Rating: " << pair.second.getRating()
-                    << ", Price: $" << pair.second.getPrice() << std::endl;
-                index++;
-            }
+            // Display the listings
+            readListings(mergesorted_listings);
         }
 
         // Run Quicksort test 100 (choose attribute to sort by)
         if (function == 2) { 
-            std::string filename = "Files/test100.csv";
             auto listings = readCSVGenerated(filename);
 
-            // Run Quicksort
+            // Quicksort the listings
+            auto quicksorted_listings = readCSVGenerated(filename);
 
-            int index = 1;
-
-            for (const auto& pair : listings) {
-                std::cout << index << ". " << "Name: " << pair.first
-                    << ", Category: " << pair.second.getCategory()
-                    << ", Num Ratings: " << pair.second.getNumRatings()
-                    << ", Rating: " << pair.second.getRating()
-                    << ", Price: $" << pair.second.getPrice() << std::endl;
-                index++;
-            }
+            // Display the listings
+            readListings(quicksorted_listings);
         }
-
     }
 
     // User menu / functionality (real practical use case with 100000 items)

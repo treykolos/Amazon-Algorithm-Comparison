@@ -66,6 +66,7 @@ std::string parseCSVField(std::stringstream& ss) {
     return field;
 }
 
+// Reads CSV file and creates a map with the name as key and value as the Listing object (call before sorting)
 // line format: name,category,number_of_reviews,rating,price
 std::map<std::string, Listing> readCSVGenerated(const std::string& filename) {
     std::map<std::string, Listing> listings;
@@ -105,6 +106,33 @@ std::map<std::string, Listing> readCSVGenerated(const std::string& filename) {
     }
 
     return listings;
+}
+
+// Function to read and then display CSV file (call for testing CSV extraction)
+void readDisplayListings(std::string filename) {
+    auto listings = readCSVGenerated(filename);
+    int index = 1;
+    for (auto& pair : listings) {
+        std::cout << index << ". " << "Name: " << pair.second.getName()
+            << ", Category: " << pair.second.getCategory()
+            << ", Num Ratings: " << pair.second.getNumRatings()
+            << ", Rating: " << pair.second.getRating()
+            << ", Price: $" << pair.second.getPrice() << std::endl;
+        index++;
+    }
+}
+
+// Function to display the map of Listings (call after sorting)
+void readListings(std::map<std::string, Listing> listings) {
+    int index = 1;
+    for (auto& pair : listings) {
+        std::cout << index << ". " << "Name: " << pair.second.getName()
+            << ", Category: " << pair.second.getCategory()
+            << ", Num Ratings: " << pair.second.getNumRatings()
+            << ", Rating: " << pair.second.getRating()
+            << ", Price: $" << pair.second.getPrice() << std::endl;
+        index++;
+    }
 }
 
 // (obsolete)
