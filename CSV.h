@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <algorithm>
 #include <stdexcept>
@@ -11,15 +12,6 @@
 // This file contains the function to extract data from a CSV file and its helpers
 // readCSVOriginal and readCSVBackup are obsolete, the datasets scraped from the internet were incomplete
 // and hard to work with, so I generated my own CSV file using an online tool: "https://extendsclass.com/csv-generator.html"
-
-// Helper function to remove commas and currency symbols (obsolete)
-std::string cleanNumericString(std::string str) {
-    str.erase(std::remove_if(str.begin(), str.end(), [](char c) {
-        // Value is casted to unsigned char to prevent assertion error from negative numbers (found in URL which are skipped)
-        return !isdigit(static_cast<unsigned char>(c)) && c != '.';
-        }), str.end());
-    return str;
-}
 
 // Function to parse a CSV field, considering quoted fields and leading empty spaces
 std::string parseCSVField(std::stringstream& ss) {
@@ -75,8 +67,8 @@ std::string parseCSVField(std::stringstream& ss) {
 }
 
 // line format: name,category,number_of_reviews,rating,price
-std::map<std::string, Listing> readCSVGenerated(const std::string& filename) {
-    std::map<std::string, Listing> listings;
+std::unordered_map<std::string, Listing> readCSVGenerated(const std::string& filename) {
+    std::unordered_map<std::string, Listing> listings;
     std::ifstream file(filename);
     std::string line, name, category;
     int numRatings = 0;
@@ -98,7 +90,7 @@ std::map<std::string, Listing> readCSVGenerated(const std::string& filename) {
 
         // Parse number of reviews
         std::string numRatingsStr = parseCSVField(ss);
-        numRatings = std::stof(numRatingsStr);
+        numRatings = std::stoi(numRatingsStr);
 
         // Parse ratings
         std::string ratingStr = parseCSVField(ss);
@@ -109,10 +101,20 @@ std::map<std::string, Listing> readCSVGenerated(const std::string& filename) {
         price = std::stof(priceStr);
 
         // Create Listing object out of parsed values
-        listings[name] = Listing(category, numRatings, rating, price);
+        listings[name] = Listing(name, category, numRatings, rating, price);
     }
 
     return listings;
+}
+
+// (obsolete)
+// Helper function to remove commas and currency symbols
+std::string cleanNumericString(std::string str) {
+    str.erase(std::remove_if(str.begin(), str.end(), [](char c) {
+        // Value is casted to unsigned char to prevent assertion error from negative numbers (found in URL which are skipped)
+        return !isdigit(static_cast<unsigned char>(c)) && c != '.';
+        }), str.end());
+    return str;
 }
 
 // (obsolete)
@@ -172,7 +174,7 @@ std::map<std::string, Listing> readCSVBackup(const std::string& filename) {
         }
 
         // Create Listing object out of parsed values
-        listings[name] = Listing(category, numRatings, rating, price);
+        listings[name] = Listing(name, category, numRatings, rating, price);
     }
 
     return listings;
@@ -219,7 +221,7 @@ std::map<std::string, Listing> readCSVOriginal(const std::string& filename) {
         parseCSVField(ss);      
 
         // Create Listing object out of parsed values
-        listings[name] = Listing(category, numRatings, rating, price);
+        listings[name] = Listing(name, category, numRatings, rating, price);
     }
 
     return listings;
