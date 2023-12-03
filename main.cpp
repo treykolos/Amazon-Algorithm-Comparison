@@ -10,11 +10,13 @@
 #include <map>
 #include <unordered_map>
 #include <string>
+#include <ctime>
 #include "Listing.h"
 #include "CSV.h"
 
 int main() {
     int option = 0;
+    int function = 0;
 
     std::cout << "What would you like to do?\n" << "Test data extraction = 1\n"
         << "Test sorting algorithms = 2\n" << "Go to Menu = 3\n";
@@ -22,7 +24,6 @@ int main() {
 
     // Test CSV extraction functions
     if(option == 1){
-        int function = 0;
         std::cout << "What function would you like to run?\n" << "Test Generated = 1\n" << "Test Generated 100 = 2\n" << "Test Backup = 3\n" << "Test Original = 4\n";
         std::cin >> function;
 
@@ -71,20 +72,27 @@ int main() {
     // Test sorting algorithms
     if (option == 2) {
         std::string filename = "Files/test100.csv";
-        int function = 0;
         std::cout << "What function would you like to run?\n" << "Test Mergesort = 1\n" 
             << "Test Quicksort = 2\n";
         std::cin >> function;
+        clock_t t;
 
         // Run Mergesort test 100 (choose attribute to sort by)
         if (function == 1) { 
             auto listings = readCSVGenerated(filename);
 
             // Mergesort the listings
+            
+            t = clock();
+            std::cout << "Timer starts\n";
             auto mergesorted_listings = readCSVGenerated(filename);
+            std::cout << "Timer ends \n";
+            t = clock() - t;
 
-            // Display the listings
+            // Display the listings (always will be 100 items)
             displayListings(mergesorted_listings);
+            std::cout << "items sorted: 100";
+            std::cout << "sorting time: " << t;
         }
 
         // Run Quicksort test 100 (choose attribute to sort by)
@@ -92,10 +100,16 @@ int main() {
             auto listings = readCSVGenerated(filename);
 
             // Quicksort the listings
+
+            t = clock();
+            std::cout << "Timer starts\n";
             auto quicksorted_listings = readCSVGenerated(filename);
+            std::cout << "Timer ends \n";
+            t = clock() - t;
 
             // Display the listings
             displayListings(quicksorted_listings);
+            std::cout << "sorting time: " << t;
         }
     }
 
