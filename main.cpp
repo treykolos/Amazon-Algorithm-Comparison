@@ -84,7 +84,7 @@ int main() {
             auto mergesorted_listings = readCSVGenerated(filename);
 
             // Display the listings
-            readListings(mergesorted_listings);
+            displayListings(mergesorted_listings);
         }
 
         // Run Quicksort test 100 (choose attribute to sort by)
@@ -95,7 +95,7 @@ int main() {
             auto quicksorted_listings = readCSVGenerated(filename);
 
             // Display the listings
-            readListings(quicksorted_listings);
+            displayListings(quicksorted_listings);
         }
     }
 

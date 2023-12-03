@@ -123,7 +123,7 @@ void readDisplayListings(std::string filename) {
 }
 
 // Function to display the map of Listings (call after sorting)
-void readListings(std::map<std::string, Listing> listings) {
+void displayListings(std::map<std::string, Listing> listings) {
     int index = 1;
     for (auto& pair : listings) {
         std::cout << index << ". " << "Name: " << pair.second.getName()
