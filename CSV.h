@@ -10,8 +10,9 @@
 #include "Listing.h"
 
 // This file contains the function to extract data from a CSV file and its helpers 
-// readCSVOriginal and readCSVBackup are obsolete, the datasets scraped from the internet were incomplete
-// and hard to work with, so I generated my own CSV file using an online tool: "https://extendsclass.com/csv-generator.html"
+// Some functions are obsolete, the datasets scraped from the internet that the functions are based on 
+// were incomplete and hard to work with, so I generated my own CSV file using an online tool: 
+// "https://extendsclass.com/csv-generator.html"
 
 // Function to parse a CSV field, considering quoted fields and leading empty spaces
 std::string parseCSVField(std::stringstream& ss) {
