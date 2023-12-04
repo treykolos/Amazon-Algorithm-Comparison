@@ -12,14 +12,8 @@
 #include <string>
 #include "Listing.h"
 #include "CSV.h"
+#include <chrono>
 
-
-bool compareByPriceForMergeSort(const std::pair<std::string, Listing>& a, const std::pair<std::string, Listing>& b) {
-
-    std::cout << "COMPARING: " << a.second.getPrice() << " WITH " << b.second.getPrice() << std::endl;
-
-    return a.second.getPrice() < b.second.getPrice();
-}
 
 void merge(std::string sortBy, std::map<std::string, Listing>& listings, int const left, int const mid, int const right) {
 
@@ -48,10 +42,9 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
 
 
         if (sortBy == "price") {
-            compare = compareByPriceForMergeSort(*itLeft, *itRight);
+            compare = (*itLeft).second.getPrice() < (*itRight).second.getPrice();
         }
         else if (sortBy == "rating") {
-            //compare = compareByRating(*itLeft, *itRight);
 
         }
 
@@ -93,81 +86,41 @@ void mergeSort(std::string sortBy, std::map<std::string, Listing>& listings, con
 
 }
 
-
-
-
-bool compareByPriceForQuickSort(std::map<std::string, Listing>::iterator it, std::map<std::string, Listing>::iterator pivot) {
-    return it->second.getPrice() <= pivot->second.getPrice();
-}
-
-bool decideQuickSortComparingAlgorithmInLoop(std::string sortBy, std::map<std::string, Listing>::iterator item, std::map<std::string, Listing>::iterator pivot, std::map<std::string, Listing>::iterator pivotIndex) {
-
-    if (sortBy == "price") {
-        return item->second.getPrice() <= pivot->second.getPrice() && item != pivotIndex;
-    }
-    else if (sortBy == "ratings") {
-
-    }
-}
-
-
-std::map<std::string, Listing>::iterator partition(std::string sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
-    auto pivot = start;
+std::map<std::string, Listing>::iterator partition(const std::string& sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
+    auto pivot = std::prev(end);
     auto pivotIndex = start;
 
-    for (auto it = std::next(start); it != std::next(end); ++it) {
-
+    for (auto it = start; it != std::prev(end); ++it) {
         bool compare;
 
         if (sortBy == "price") {
-            compare = compareByPriceForQuickSort(it, pivot);
+            compare = it->second.getPrice() <= pivot->second.getPrice();
         }
-        else if (sortBy == "rating") {
-            //compare = compareByRating(*itLeft, *itRight);
+        else {
 
         }
 
         if (compare) {
+            std::swap(it->second, pivotIndex->second);
             ++pivotIndex;
         }
     }
 
-    std::iter_swap(pivot, pivotIndex);
-
-    auto i = start;
-    auto j = std::prev(end);
-
-    while (i != pivotIndex && j != pivotIndex) {
-
-        while (decideQuickSortComparingAlgorithmInLoop(sortBy, i, pivot, pivotIndex)) {
-            ++i;
-        }
-
-        while (decideQuickSortComparingAlgorithmInLoop(sortBy, j, pivot, pivotIndex)) {
-            --j;
-        }
-
-        if (i != pivotIndex && j != pivotIndex) {
-            std::iter_swap(i, j);
-            ++i;
-            --j;
-        }
-    }
+    std::swap(pivot->second, pivotIndex->second);
 
     return pivotIndex;
 }
 
-void quickSort(std::string sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
+void quickSort(const std::string& sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
     if (std::distance(start, end) <= 1) {
         return;
     }
 
-    auto pivot = partition(sortBy, listings, start, end);
+    auto p = partition(sortBy, listings, start, end);
 
-    quickSort(sortBy, listings, start, pivot);
-    quickSort(sortBy, listings, std::next(pivot), end);
+    quickSort(sortBy, listings, start, p);
+    quickSort(sortBy, listings, std::next(p), end);
 }
-
 
 
 int main() {
@@ -238,8 +191,16 @@ int main() {
             auto listings = readCSVGenerated(filename);
 
             // Mergesort the listings
+
+            auto timeStart = std::chrono::high_resolution_clock::now();
+
             mergeSort("price", listings, 0, listings.size() - 1);
+
+            auto timeEnd = std::chrono::high_resolution_clock::now();
+            double duration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart).count();
             
+            std::cout << "MergeSort Elapsed Time (in milliseconds): " << duration << std::endl;
+
             // Display the listings
             displayListings(listings);
         }
@@ -249,7 +210,14 @@ int main() {
             auto listings = readCSVGenerated(filename);
 
             // Mergesort the listings
+            auto timeStart = std::chrono::high_resolution_clock::now();
+
             quickSort("price", listings, listings.begin(), listings.end());
+
+            auto timeEnd = std::chrono::high_resolution_clock::now();
+            double duration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart).count();
+
+            std::cout << "Quicksort Elapsed Time (in milliseconds): " << duration << std::endl;
 
             // Display the listings
             displayListings(listings);
