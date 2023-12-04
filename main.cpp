@@ -10,20 +10,176 @@
 #include <map>
 #include <unordered_map>
 #include <string>
-#include <ctime>
 #include "Listing.h"
 #include "CSV.h"
 
+
+bool compareByPriceForMergeSort(const std::pair<std::string, Listing>& a, const std::pair<std::string, Listing>& b) {
+
+    std::cout << "COMPARING: " << a.second.getPrice() << " WITH " << b.second.getPrice() << std::endl;
+
+    return a.second.getPrice() < b.second.getPrice();
+}
+
+void merge(std::string sortBy, std::map<std::string, Listing>& listings, int const left, int const mid, int const right) {
+
+    int const subMapOne = mid - left + 1;
+    int const subMapTwo = right - mid;
+
+    std::map<std::string, Listing> leftMap, rightMap;
+
+    auto it = listings.begin();
+    std::advance(it, left);
+    leftMap.insert(it, std::next(it, subMapOne));
+
+    it = listings.begin();
+    std::advance(it, mid + 1);
+    rightMap.insert(it, std::next(it, subMapTwo));
+
+    auto itLeft = leftMap.begin();
+    auto itRight = rightMap.begin();
+    auto itMerged = listings.begin();
+
+    std::advance(itMerged, left);
+
+    while (itLeft != leftMap.end() && itRight != rightMap.end()) {
+
+        bool compare;
+
+
+        if (sortBy == "price") {
+            compare = compareByPriceForMergeSort(*itLeft, *itRight);
+        }
+        else if (sortBy == "rating") {
+            //compare = compareByRating(*itLeft, *itRight);
+
+        }
+
+        if (compare) {
+            itMerged->second = itLeft->second;
+            itLeft++;
+        }
+        else {
+            itMerged->second = itRight->second;
+            itRight++;
+        }
+        itMerged++;
+    }
+
+    while (itLeft != leftMap.end()) {
+        itMerged->second = itLeft->second;
+        itLeft++;
+        itMerged++;
+    }
+
+    while (itRight != rightMap.end()) {
+        itMerged->second = itRight->second;
+        itRight++;
+        itMerged++;
+    }
+
+}
+
+void mergeSort(std::string sortBy, std::map<std::string, Listing>& listings, const int begin, const int end) {
+
+    if (begin >= end) {
+        return;
+    }
+
+    int mid = begin + (end - begin) / 2;
+    mergeSort(sortBy, listings, begin, mid);
+    mergeSort(sortBy, listings, mid + 1, end);
+    merge(sortBy, listings, begin, mid, end);
+
+}
+
+
+
+
+bool compareByPriceForQuickSort(std::map<std::string, Listing>::iterator it, std::map<std::string, Listing>::iterator pivot) {
+    return it->second.getPrice() <= pivot->second.getPrice();
+}
+
+bool decideQuickSortComparingAlgorithmInLoop(std::string sortBy, std::map<std::string, Listing>::iterator item, std::map<std::string, Listing>::iterator pivot, std::map<std::string, Listing>::iterator pivotIndex) {
+
+    if (sortBy == "price") {
+        return item->second.getPrice() <= pivot->second.getPrice() && item != pivotIndex;
+    }
+    else if (sortBy == "ratings") {
+
+    }
+}
+
+
+std::map<std::string, Listing>::iterator partition(std::string sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
+    auto pivot = start;
+    auto pivotIndex = start;
+
+    for (auto it = std::next(start); it != std::next(end); ++it) {
+
+        bool compare;
+
+        if (sortBy == "price") {
+            compare = compareByPriceForQuickSort(it, pivot);
+        }
+        else if (sortBy == "rating") {
+            //compare = compareByRating(*itLeft, *itRight);
+
+        }
+
+        if (compare) {
+            ++pivotIndex;
+        }
+    }
+
+    std::iter_swap(pivot, pivotIndex);
+
+    auto i = start;
+    auto j = std::prev(end);
+
+    while (i != pivotIndex && j != pivotIndex) {
+
+        while (decideQuickSortComparingAlgorithmInLoop(sortBy, i, pivot, pivotIndex)) {
+            ++i;
+        }
+
+        while (decideQuickSortComparingAlgorithmInLoop(sortBy, j, pivot, pivotIndex)) {
+            --j;
+        }
+
+        if (i != pivotIndex && j != pivotIndex) {
+            std::iter_swap(i, j);
+            ++i;
+            --j;
+        }
+    }
+
+    return pivotIndex;
+}
+
+void quickSort(std::string sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
+    if (std::distance(start, end) <= 1) {
+        return;
+    }
+
+    auto pivot = partition(sortBy, listings, start, end);
+
+    quickSort(sortBy, listings, start, pivot);
+    quickSort(sortBy, listings, std::next(pivot), end);
+}
+
+
+
 int main() {
     int option = 0;
-    int function = 0;
 
     std::cout << "What would you like to do?\n" << "Test data extraction = 1\n"
         << "Test sorting algorithms = 2\n" << "Go to Menu = 3\n";
     std::cin >> option;
 
     // Test CSV extraction functions
-    if(option == 1){
+    if (option == 1) {
+        int function = 0;
         std::cout << "What function would you like to run?\n" << "Test Generated = 1\n" << "Test Generated 100 = 2\n" << "Test Backup = 3\n" << "Test Original = 4\n";
         std::cin >> function;
 
@@ -66,51 +222,37 @@ int main() {
                 index++;
             }
         }
-
     }
-    
+
     // Test sorting algorithms
     if (option == 2) {
         std::string filename = "Files/test100.csv";
-        std::cout << "What function would you like to run?\n" << "Test Mergesort = 1\n" 
+        int function = 0;
+        std::cout << "What function would you like to run?\n" << "Test Mergesort = 1\n"
             << "Test Quicksort = 2\n";
         std::cin >> function;
-        clock_t t;
 
         // Run Mergesort test 100 (choose attribute to sort by)
-        if (function == 1) { 
+        if (function == 1) {
+
             auto listings = readCSVGenerated(filename);
 
             // Mergesort the listings
+            mergeSort("price", listings, 0, listings.size() - 1);
             
-            t = clock();
-            std::cout << "Timer starts\n";
-            auto mergesorted_listings = readCSVGenerated(filename);
-            std::cout << "Timer ends \n";
-            t = clock() - t;
-
-            // Display the listings (always will be 100 items)
-            displayListings(mergesorted_listings);
-            std::cout << "items sorted: 100\n";
-            std::cout << "sorting time: " << t << "\n";
+            // Display the listings
+            displayListings(listings);
         }
 
         // Run Quicksort test 100 (choose attribute to sort by)
-        if (function == 2) { 
+        if (function == 2) {
             auto listings = readCSVGenerated(filename);
 
-            // Quicksort the listings
-
-            t = clock();
-            std::cout << "Timer starts\n";
-            auto quicksorted_listings = readCSVGenerated(filename);
-            std::cout << "Timer ends \n";
-            t = clock() - t;
+            // Mergesort the listings
+            quickSort("price", listings, listings.begin(), listings.end());
 
             // Display the listings
-            displayListings(quicksorted_listings);
-            std::cout << "items sorted: 100\n";
-            std::cout << "sorting time: " << t << "\n";
+            displayListings(listings);
         }
     }
 
