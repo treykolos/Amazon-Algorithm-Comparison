@@ -36,7 +36,6 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
     std::advance(itMerged, left);
 
     while (itLeft != leftMap.end() && itRight != rightMap.end()) {
-        //std::cout << "1" << std::endl;
 
         bool compare;
 
@@ -69,15 +68,12 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
     }
 
     while (itLeft != leftMap.end()) {
-        //std::cout << "2" << std::endl;
         itMerged->second = itLeft->second;
         itLeft++;
         itMerged++;
     }
 
     while (itRight != rightMap.end()) {
-        //std::cout << "3" << std::endl;
-
         itMerged->second = itRight->second;
         itRight++;
         itMerged++;
