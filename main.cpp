@@ -1,24 +1,18 @@
-// Complexity comes in how the various sorting methods work with different categories of items
-// The main function should also be able to accept input on which items to sort by, ex. "fishing rod" 
-// only will sort fishing rod items. (will create a sub-map of only those items) (can be implemented with fixed categories)
-
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <map>
-#include <unordered_map>
 #include <string>
 #include <chrono>
 #include "Listing.h"
-#include "Sorting.h"
 #include "CSV.h"
+#include "Sorting.h"
 
 int main() {
     int option = 0;
     int function = 0;
-    std::string filename = "Files/test100.csv";
-    // Initializes on 100 items test
-    auto listings = readCSVGenerated(filename);
+    std::string filename = "No File Loaded";
+
+    // Initializes listings map with no information
+    std::map<std::string,Listing> listings;
 
     std::cout << "What would you like to do?\n" << " 1. Test data extraction\n"
         << " 2. Test sorting algorithms\n" << " 3. Go to Menu\n";
@@ -73,7 +67,6 @@ int main() {
     }
     
     // Test sorting algorithms
-    /*
     if (option == 2) {
         std::string filename = "Files/test100.csv";
         int function = 0;
@@ -93,12 +86,12 @@ int main() {
             mergeSort("price", listings, 0, listings.size() - 1);
 
             auto timeEnd = std::chrono::high_resolution_clock::now();
-            double duration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart).count();
-
-            std::cout << "MergeSort Elapsed Time (in milliseconds): " << duration << std::endl;
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart).count();
 
             // Display the listings
             displayListings(listings);
+
+            std::cout << "MergeSort Elapsed Time (in milliseconds): " << duration << std::endl;
         }
 
         // Run Quicksort test 100 (choose attribute to sort by)
@@ -111,15 +104,14 @@ int main() {
             quickSort("price", listings, listings.begin(), listings.end());
 
             auto timeEnd = std::chrono::high_resolution_clock::now();
-            double duration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart).count();
-
-            std::cout << "Quicksort Elapsed Time (in milliseconds): " << duration << std::endl;
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeStart).count();
 
             // Display the listings
             displayListings(listings);
+
+            std::cout << "Quicksort Elapsed Time (in milliseconds): " << duration << std::endl;
         }
     }
-    */
 
     // User menu / functionality
     if (option == 3) {
@@ -190,6 +182,7 @@ int main() {
                 std::cout << "Time to display: " << displayTime << "ms\n\n";
             }
 
+
             // Sort the file data
             else if (function == 3) {
                 // Select classification to sort by
@@ -211,7 +204,7 @@ int main() {
 
                 else if (classification == 3) {
                     // sort for number of ratings
-                    sortBy = "numRatings";
+                    sortBy = "number_of_ratings";
                 }
 
                 else if (classification == 4) {
@@ -224,8 +217,32 @@ int main() {
                     sortBy = "price";
                 }
 
-                // Sort by both merge sort and quick sort and display the time to sort for each.
-                
+                // quickSort the listings
+                auto timeStartQuickSort = std::chrono::high_resolution_clock::now();
+
+                std::cout << "Starting QuickSort..." << std::endl;
+
+                quickSort(sortBy, listings, listings.begin(), listings.end());
+                std::cout << "Finished QuickSort!" << std::endl;
+
+                auto timeEndQuickSort = std::chrono::high_resolution_clock::now();
+                auto durationQuickSort = std::chrono::duration_cast<std::chrono::milliseconds>(timeEndQuickSort - timeStartQuickSort).count();
+
+                // reset the listings map back to unsorted state
+                std::map<std::string, Listing> listings = readCSVGenerated(filename);
+
+                // mergeSort the listings
+                auto timeStartMergeSort = std::chrono::high_resolution_clock::now();
+                std::cout << "Starting MergeSort..." << std::endl;
+
+                mergeSort(sortBy, listings, 0, listings.size() - 1);
+                std::cout << "Finished MergeSort!" << std::endl;
+
+                auto timeEndMergeSort = std::chrono::high_resolution_clock::now();
+                auto durationMergeSort = std::chrono::duration_cast<std::chrono::milliseconds>(timeEndMergeSort - timeStartMergeSort).count();
+
+                std::cout << "QuickSort Elapsed Time (in milliseconds): " << durationQuickSort << std::endl;
+                std::cout << "MergeSort Elapsed Time (in milliseconds): " << durationMergeSort << std::endl;
             }
 
             // Exit the loop

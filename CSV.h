@@ -1,12 +1,7 @@
 #pragma once
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <map>
-#include <unordered_map>
 #include <string>
-#include <algorithm>
-#include <stdexcept>
 #include "Listing.h"
 
 // This file contains the function to extract data from a CSV file and its helpers 

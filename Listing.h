@@ -1,9 +1,6 @@
 #pragma once
 // This file contains the custom class object for Amazon Listings
 // map is sorted by name with leading spaces, then capitals, then lowercase alphabetically by default
-// we need it sorted alphabetically by category and name (can keep leading spaces or delete) 
-// and numerically (by rating, number of reviews, price)
-// can also store listings in an unordered map (probably necessary)
 
 #include <iostream>
 #include <fstream>

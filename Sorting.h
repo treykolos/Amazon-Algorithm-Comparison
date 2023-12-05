@@ -1,24 +1,17 @@
 #pragma once
-// This file will contain the function for Quick Sort algorithm 
-// sorts must be able to be done alphabetically and also numerically (including int and float, check if errors)
-// can use 2 seperate functions to be called or include some way to recognize the variable to be sorted
-// can create a function to run through a single step of the sorting algorithm at a time and then print to test i
-// This file contains the function for Merge Sort algorithm 
-// sorts must be able to be done alphabetically and also numerically (including int and float, check if errors)
-// can use 2 seperate functions to be called or include some way to recognize the variable to be sorted
-// can create a function to run through a single step of the sorting algorithm at a time and then print to test it
+// This file contains the functions for merge sort and quicksort
+// The implementation in main allows them to sort by any attributes of the Listings
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <map>
-#include <unordered_map>
 #include <string>
+#include <chrono>
 #include "Listing.h"
 #include "CSV.h"
-#include <chrono>
 
-/*
+// mergeSort helper function
 void merge(std::string sortBy, std::map<std::string, Listing>& listings, int const left, int const mid, int const right) {
 
     int const subMapOne = mid - left + 1;
@@ -40,16 +33,25 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
 
     std::advance(itMerged, left);
 
+    bool compare = false;
+
     while (itLeft != leftMap.end() && itRight != rightMap.end()) {
-
-        bool compare = false;
-
+        //std::cout << "1" << std::endl;
 
         if (sortBy == "price") {
             compare = (*itLeft).second.getPrice() < (*itRight).second.getPrice();
         }
         else if (sortBy == "rating") {
-
+            compare = (*itLeft).second.getRating() < (*itRight).second.getRating();
+        }
+        else if (sortBy == "number_ratings") {
+            compare = (*itLeft).second.getNumRatings() < (*itRight).second.getNumRatings();
+        }
+        else if (sortBy == "name") {
+            compare = (*itLeft).second.getName() < (*itRight).second.getName();
+        }
+        else if (sortBy == "category") {
+            compare = (*itLeft).second.getCategory() < (*itRight).second.getCategory();
         }
 
         if (compare) {
@@ -64,12 +66,15 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
     }
 
     while (itLeft != leftMap.end()) {
+        //std::cout << "2" << std::endl;
         itMerged->second = itLeft->second;
         itLeft++;
         itMerged++;
     }
 
     while (itRight != rightMap.end()) {
+        //std::cout << "3" << std::endl;
+
         itMerged->second = itRight->second;
         itRight++;
         itMerged++;
@@ -77,6 +82,7 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
 
 }
 
+// Recursive merge sort
 void mergeSort(std::string sortBy, std::map<std::string, Listing>& listings, const int begin, const int end) {
 
     if (begin >= end) {
@@ -84,24 +90,35 @@ void mergeSort(std::string sortBy, std::map<std::string, Listing>& listings, con
     }
 
     int mid = begin + (end - begin) / 2;
+
     mergeSort(sortBy, listings, begin, mid);
     mergeSort(sortBy, listings, mid + 1, end);
     merge(sortBy, listings, begin, mid, end);
 
 }
 
+// quickSort helper function
 std::map<std::string, Listing>::iterator partition(const std::string& sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
     auto pivot = std::prev(end);
     auto pivotIndex = start;
+    bool compare = false;
 
     for (auto it = start; it != std::prev(end); ++it) {
-        bool compare = false;
 
         if (sortBy == "price") {
             compare = it->second.getPrice() <= pivot->second.getPrice();
         }
-        else {
-
+        else if (sortBy == "rating") {
+            compare = it->second.getRating() < pivot->second.getRating();
+        }
+        else if (sortBy == "number_ratings") {
+            compare = it->second.getNumRatings() < pivot->second.getNumRatings();
+        }
+        else if (sortBy == "name") {
+            compare = it->second.getName() < pivot->second.getName();
+        }
+        else if (sortBy == "category") {
+            compare = it->second.getCategory() < pivot->second.getCategory();
         }
 
         if (compare) {
@@ -115,6 +132,7 @@ std::map<std::string, Listing>::iterator partition(const std::string& sortBy, st
     return pivotIndex;
 }
 
+// quicksort called function
 void quickSort(const std::string& sortBy, std::map<std::string, Listing>& listings, std::map<std::string, Listing>::iterator start, std::map<std::string, Listing>::iterator end) {
     if (std::distance(start, end) <= 1) {
         return;
@@ -125,4 +143,3 @@ void quickSort(const std::string& sortBy, std::map<std::string, Listing>& listin
     quickSort(sortBy, listings, start, p);
     quickSort(sortBy, listings, std::next(p), end);
 }
-*/
