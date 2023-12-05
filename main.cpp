@@ -12,15 +12,15 @@ int main() {
     std::string filename = "No File Loaded";
 
     // Initializes listings map with no information
-    std::map<std::string,Listing> listings;
+    std::map<std::string, Listing> listings;
 
     std::cout << "What would you like to do?\n" << " 1. Test data extraction\n"
         << " 2. Test sorting algorithms\n" << " 3. Go to Menu\n";
     std::cin >> option;
 
     // Test CSV extraction functions
-    if(option == 1){
-        std::cout << "What function would you like to run?\n" << " 1. Test Generated\n" << 
+    if (option == 1) {
+        std::cout << "What function would you like to run?\n" << " 1. Test Generated\n" <<
             " 2. Test Generated 100\n" << " 3. Test Backup\n" << " 4. Test Original\n";
         std::cin >> function;
 
@@ -65,7 +65,7 @@ int main() {
         }
 
     }
-    
+
     // Test sorting algorithms
     if (option == 2) {
         std::string filename = "Files/test100.csv";
