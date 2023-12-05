@@ -1,7 +1,12 @@
 #pragma once
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <map>
+#include <unordered_map>
 #include <string>
+#include <algorithm>
+#include <stdexcept>
 #include "Listing.h"
 
 // This file contains the function to extract data from a CSV file and its helpers 
@@ -242,7 +247,7 @@ std::map<std::string, Listing> readCSVOriginal(const std::string& filename) {
         parseCSVField(ss);
 
         // Skip delivery date
-        parseCSVField(ss);      
+        parseCSVField(ss);
 
         // Create Listing object out of parsed values
         listings[name] = Listing(name, category, numRatings, rating, price);
@@ -250,4 +255,3 @@ std::map<std::string, Listing> readCSVOriginal(const std::string& filename) {
 
     return listings;
 }
-
