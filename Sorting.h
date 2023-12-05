@@ -10,10 +10,6 @@
 #include "Listing.h"
 #include "CSV.h"
 
-
-
-
-
 std::map<std::string, Listing> merge(std::string sortBy, std::map<std::string, Listing>& left, std::map<std::string, Listing>& right) {
 
     std::map<std::string, Listing> result;
