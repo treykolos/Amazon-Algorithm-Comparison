@@ -16,34 +16,6 @@
 
 void merge(std::string sortBy, std::map<std::string, Listing>& listings, int const left, int const mid, int const right) {
 
-    //std::map<std::string, Listing> result;
-    //auto left_it = left.begin();
-    //auto right_it = right.begin();
-
-    //while (left_it != left.end() && right_it != right.end()) {
-    //    if (left_it->first < right_it->first) {
-    //        result[left_it->first] = left_it->second;
-    //        ++left_it;
-    //    }
-    //    else {
-    //        result[right_it->first] = right_it->second;
-    //        ++right_it;
-    //    }
-    //}
-
-    //// Copy the remaining elements from left and right maps
-    //while (left_it != left.end()) {
-    //    result[left_it->first] = left_it->second;
-    //    ++left_it;
-    //}
-
-    //while (right_it != right.end()) {
-    //    result[right_it->first] = right_it->second;
-    //    ++right_it;
-    //}
-
-    //return result;
-
     int const subMapOne = mid - left + 1;
     int const subMapTwo = right - mid;
 
@@ -113,36 +85,13 @@ void merge(std::string sortBy, std::map<std::string, Listing>& listings, int con
 
 }
 
-int q = 0;
-
 void mergeSort(std::string sortBy, std::map<std::string, Listing>& listings, const int begin, const int end) {
-
-    //if (listings.size() <= 1) {
-    //    return listings;
-    //}
-
-    // Split the map into two halves
-    //auto middle = std::next(listings.begin(), listings.size() / 2);
-    //std::map<std::string, Listing> left(listings.begin(), middle);
-    //std::map<std::string, Listing> right(middle, listings.end());
-
-    //// Recursively sort each half
-    //left = mergeSort(sortBy, left);
-    //right = mergeSort(sortBy, right);
-
-    //// Merge the sorted halves
-    //return merge(sortBy, left, right);
 
     if (begin >= end) {
         return;
     }
 
-    q++;
     int mid = begin + (end - begin) / 2;
-
-    if (q % 1000 == 0) {
-        //std::cout << begin << " " << mid << " " << end << std::endl;
-    }
 
     mergeSort(sortBy, listings, begin, mid);
     mergeSort(sortBy, listings, mid + 1, end);
